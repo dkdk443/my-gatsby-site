@@ -1,12 +1,24 @@
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import * as React from 'react'
 import { MDXRenderer } from 'gatsby-plugin-mdx'
+import { GatsbyImage, getImage } from 'gatsby-plugin-image' // highlight-line
 import Layout from '../../components/layouts'
 
 const BlogPost = ({ data }) => {
+  const image = getImage(data.mdx.frontmatter.hero_image)
   return (
     <Layout pageTitle={data.mdx.frontmatter.title}>
-       <p>{data.mdx.frontmatter.date}</p>
+      <p>{data.mdx.frontmatter.date}</p>
+      <GatsbyImage
+      image={image}
+      alt={data.mdx.frontmatter.hero_image_alt}
+      />
+      <p>
+        Photo Credit:{" "}
+        <Link to={data.mdx.frontmatter.hero_image_credit_link}>
+          {data.mdx.frontmatter.hero_image_credit_text}
+        </Link>
+      </p>
       <MDXRenderer>
         {data.mdx.body}
       </MDXRenderer>
@@ -15,14 +27,22 @@ const BlogPost = ({ data }) => {
 }
 
 export const query = graphql`
-  query ($id: String) {
-    mdx(id: {eq: $id}) {
-      frontmatter {
-        title
-        date(formatString: "MMMM D, YYYY")
+ query ($id: String) {
+  mdx(id: {eq: $id}) {
+    frontmatter {
+      title
+      date(formatString: "MMMM D, YYYY")
+      hero_image_alt
+      hero_image_credit_link
+      hero_image_credit_text
+      hero_image {
+        childImageSharp {
+          gatsbyImageData
+        }
       }
-      body
     }
+    body
   }
+}
 `
 export default BlogPost

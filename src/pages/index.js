@@ -1,5 +1,4 @@
 import * as React from "react"
-import { Link } from 'gatsby'
 import Layout from "../components/layouts"
 import { StaticImage } from "gatsby-plugin-image"
 // markup
